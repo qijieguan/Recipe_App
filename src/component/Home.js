@@ -68,7 +68,7 @@ export default function Home() {
                 {data ?
                     data.map(recipe => <Recipe key={uuid()} id={uuid()} recipe={recipe}/>)
                     :
-                    <div>No results found</div>
+                    <div className="no-results">No results found</div>
                 }
             </div>
             <div className="pagination">
