@@ -4,10 +4,13 @@ import uuid from 'react-uuid';
 
 export default function Home() {
 
+    const form = document.getElementById('search');
+    const search = document.getElementById('search-input');
+
     const [data, setData] = useState([]);
     const [dataset, setDataset] = useState([]);
     const [activePage, setPage] = useState("1");
-    const [query, setQuery] = useState('beef');
+    const [query, setQuery] = useState('sushi');
     let apiURL = `${process.env.REACT_APP_BASE_URL}q=${query}&app_id=${process.env.REACT_APP_APP_ID}&app_key=${process.env.REACT_APP_APP_KEY}&from=0&to=60`;
 
     useEffect(() => {getRecipe();}, [query])
@@ -27,19 +30,18 @@ export default function Home() {
         });
     }
 
-    const handlePage = (number) => {
-        if (activePage === number) {return;}
-        let elements = document.querySelectorAll('.page-li');
-        elements.forEach(elements => 
-            elements.style.border = '0'
-        );
-        document.getElementById(number).style.border = '4px solid limegreen';
+    const defaultPage = (number) => {
+        document.getElementById(`page_${activePage}`).style.border = '0';
+        document.getElementById(`page_${number}`).style.border = '4px solid limegreen';
         setPage(number);
-        setData(dataset[number - 1]);
     }
 
-    const form = document.getElementById('search');
-    const search = document.getElementById('search-input');
+    const handlePage = (number) => {
+        if (activePage === number) {return;}
+        defaultPage(number);
+        setData(dataset[number - 1]);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
 
     if (form) {
         form.addEventListener('submit', (e) => {
@@ -49,13 +51,16 @@ export default function Home() {
             if (searchTerm) {
                 setQuery(searchTerm);
             }
+            defaultPage("1");
         });    
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         if (search.value) {
             setQuery(search.value);
         }
+        defaultPage("1");
     }
 
     return(
@@ -72,11 +77,11 @@ export default function Home() {
                 }
             </div>
             <div className="pagination">
-                <li className="page-li" id={1} style={{border: '4px solid limegreen'}} onClick={()=>handlePage("1")}>1</li>
-                <li className="page-li" id={2} onClick={()=>handlePage("2")}>2</li>
-                <li className="page-li" id={3} onClick={()=>handlePage("3")}>3</li>
-                <li className="page-li" id={4} onClick={()=>handlePage("4")}>4</li>
-                <li className="page-li" id={5} onClick={()=>handlePage("5")}>5</li>
+                <li id={"page_1"} style={{border: '4px solid limegreen'}} onClick={()=>handlePage("1")}>1</li>
+                <li id={"page_2"} onClick={()=>handlePage("2")}>2</li>
+                <li id={"page_3"} onClick={()=>handlePage("3")}>3</li>
+                <li id={"page_4"} onClick={()=>handlePage("4")}>4</li>
+                <li id={"page_5"} onClick={()=>handlePage("5")}>5</li>
             </div>
         </div>
     );
