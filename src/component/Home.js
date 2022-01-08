@@ -50,6 +50,7 @@ export default function Home() {
             const searchTerm = search.value;
             if (searchTerm) {
                 setQuery(searchTerm);
+                setData([]);
             }
             defaultPage("1");
         });    
@@ -59,6 +60,7 @@ export default function Home() {
         e.preventDefault();
         if (search.value) {
             setQuery(search.value);
+            setData([]);
         }
         defaultPage("1");
     }
